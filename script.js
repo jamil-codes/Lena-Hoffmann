@@ -51,34 +51,97 @@ document.querySelectorAll('.f-btn').forEach(b => {
 });
 
 /* LIGHTBOX */
+const lb = document.getElementById('lb');
+const lbImg = document.getElementById('lbImg');
+const lbSpinner = document.getElementById('lbSpinner');
+const lbCaption = document.getElementById('lbCaption');
+const lbCounter = document.getElementById('lbCounter');
+
 function openLb(i) {
-    lbIdx = i; updateLb();
-    document.getElementById('lb').classList.add('open');
+    lbIdx = i;
+    updateLb();
+    lb.classList.add('open');
     document.body.style.overflow = 'hidden';
 }
+
 function closeLb() {
-    document.getElementById('lb').classList.remove('open');
+    lb.classList.remove('open');
     document.body.style.overflow = '';
 }
+
 function updateLb() {
-    const img = document.getElementById('lbImg');
-    img.style.opacity = 0;
-    setTimeout(() => {
-        img.src = filtered[lbIdx].src.replace('w=700', 'w=1400').replace('w=800', 'w=1400');
-        document.getElementById('lbCaption').textContent = filtered[lbIdx].cap;
-        document.getElementById('lbCounter').textContent = `${String(lbIdx + 1).padStart(2, '0')} / ${String(filtered.length).padStart(2, '0')}`;
-        img.style.opacity = 1;
-    }, 200);
+    // Show spinner, hide image
+    lbImg.style.opacity = '0';
+    lbSpinner.classList.add('vis');
+
+    const newSrc = filtered[lbIdx].src.replace('w=700', 'w=1400').replace('w=800', 'w=1400');
+    lbCaption.textContent = filtered[lbIdx].cap;
+    lbCounter.textContent = `${String(lbIdx + 1).padStart(2, '0')} / ${String(filtered.length).padStart(2, '0')}`;
+
+    const tempImg = new Image();
+    tempImg.onload = () => {
+        lbImg.src = newSrc;
+        lbSpinner.classList.remove('vis');
+        lbImg.style.opacity = '1';
+    };
+    tempImg.onerror = () => {
+        lbImg.src = newSrc;
+        lbSpinner.classList.remove('vis');
+        lbImg.style.opacity = '1';
+    };
+    tempImg.src = newSrc;
 }
-document.getElementById('lbClose').addEventListener('click', closeLb);
-document.getElementById('lb').addEventListener('click', e => { if (e.target === e.currentTarget) closeLb(); });
-document.getElementById('lbPrev').addEventListener('click', e => { e.stopPropagation(); lbIdx = (lbIdx - 1 + filtered.length) % filtered.length; updateLb(); });
-document.getElementById('lbNext').addEventListener('click', e => { e.stopPropagation(); lbIdx = (lbIdx + 1) % filtered.length; updateLb(); });
+
+document.getElementById('lbClose').addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeLb();
+});
+
+lb.addEventListener('click', e => {
+    if (e.target === lb) closeLb();
+});
+
+document.getElementById('lbPrev').addEventListener('click', e => {
+    e.stopPropagation();
+    lbIdx = (lbIdx - 1 + filtered.length) % filtered.length;
+    updateLb();
+});
+
+document.getElementById('lbNext').addEventListener('click', e => {
+    e.stopPropagation();
+    lbIdx = (lbIdx + 1) % filtered.length;
+    updateLb();
+});
+
 document.addEventListener('keydown', e => {
-    if (!document.getElementById('lb').classList.contains('open')) return;
+    if (!lb.classList.contains('open')) return;
     if (e.key === 'Escape') closeLb();
     if (e.key === 'ArrowLeft') { lbIdx = (lbIdx - 1 + filtered.length) % filtered.length; updateLb(); }
     if (e.key === 'ArrowRight') { lbIdx = (lbIdx + 1) % filtered.length; updateLb(); }
+});
+
+/* MOBILE NAV */
+const hamburger = document.getElementById('navHamburger');
+const mobileNav = document.getElementById('mobileNav');
+const mobileNavClose = document.getElementById('mobileNavClose');
+
+function openMobileNav() {
+    mobileNav.classList.add('open');
+    hamburger.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMobileNav() {
+    mobileNav.classList.remove('open');
+    hamburger.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+hamburger.addEventListener('click', openMobileNav);
+mobileNavClose.addEventListener('click', closeMobileNav);
+
+mobileNav.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', closeMobileNav);
 });
 
 /* NAV */

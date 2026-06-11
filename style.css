@@ -1083,15 +1083,57 @@ nav.scrolled .nav-avail {
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100%
+    flex: 1;
+    min-height: 0
+}
+
+.lb-img-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 78vw;
+    max-height: 80vh
 }
 
 #lbImg {
     max-width: 78vw;
-    max-height: 82vh;
+    max-height: 80vh;
     object-fit: contain;
-    transition: opacity .3s;
-    border: .5px solid rgba(255, 255, 255, .04)
+    transition: opacity .35s;
+    border: .5px solid rgba(255, 255, 255, .04);
+    display: block
+}
+
+.lb-spinner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s
+}
+
+.lb-spinner::after {
+    content: '';
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(192, 155, 110, .25);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .7s linear infinite
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+.lb-spinner.vis {
+    opacity: 1
 }
 
 .lb-btn {
@@ -1109,7 +1151,8 @@ nav.scrolled .nav-avail {
     cursor: pointer;
     font-size: 18px;
     transition: all .3s;
-    font-family: var(--sans)
+    font-family: var(--sans);
+    z-index: 10
 }
 
 .lb-btn:hover {
@@ -1126,14 +1169,14 @@ nav.scrolled .nav-avail {
 }
 
 .lb-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: relative;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 28px 40px
+    padding: 28px 40px;
+    z-index: 10;
+    flex-shrink: 0
 }
 
 .lb-counter {
@@ -1152,7 +1195,9 @@ nav.scrolled .nav-avail {
     padding: 10px 20px;
     cursor: pointer;
     font-family: var(--sans);
-    transition: all .3s
+    transition: all .3s;
+    position: relative;
+    z-index: 20
 }
 
 #lbClose:hover {
@@ -1161,11 +1206,9 @@ nav.scrolled .nav-avail {
 }
 
 .lb-foot {
-    position: absolute;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center
+    padding: 20px 40px 28px;
+    text-align: center;
+    flex-shrink: 0
 }
 
 #lbCaption {
@@ -1173,6 +1216,37 @@ nav.scrolled .nav-avail {
     font-style: italic;
     font-size: 16px;
     color: rgba(255, 255, 255, .45)
+}
+
+@media(max-width:680px) {
+
+    .lb-img-wrap,
+    #lbImg {
+        max-width: 92vw;
+        max-height: 72vh
+    }
+
+    #lbPrev {
+        left: 8px
+    }
+
+    #lbNext {
+        right: 8px
+    }
+
+    .lb-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 14px
+    }
+
+    .lb-bar {
+        padding: 20px 20px
+    }
+
+    .lb-foot {
+        padding: 12px 20px 20px
+    }
 }
 
 /* ═══════════ EDITORIAL SPREAD ═══════════ */
@@ -2195,6 +2269,117 @@ footer {
     letter-spacing: .06em
 }
 
+/* ═══════════ HAMBURGER & MOBILE NAV ═══════════ */
+.nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 201
+}
+
+.nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: .5px;
+    background: rgba(255, 255, 255, .75);
+    transition: all .3s
+}
+
+nav.scrolled .nav-hamburger span {
+    background: var(--ink)
+}
+
+.nav-hamburger.open span:nth-child(1) {
+    transform: translateY(5.5px) rotate(45deg)
+}
+
+.nav-hamburger.open span:nth-child(2) {
+    opacity: 0
+}
+
+.nav-hamburger.open span:nth-child(3) {
+    transform: translateY(-5.5px) rotate(-45deg)
+}
+
+.mobile-nav {
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    z-index: 1500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .4s cubic-bezier(.4, 0, .2, 1)
+}
+
+.mobile-nav.open {
+    opacity: 1;
+    pointer-events: all
+}
+
+.mobile-nav-close {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    background: none;
+    border: .5px solid rgba(255, 255, 255, .2);
+    color: rgba(255, 255, 255, .5);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all .3s
+}
+
+.mobile-nav-close:hover {
+    border-color: var(--accent);
+    color: var(--accent)
+}
+
+.mobile-nav ul {
+    list-style: none;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px
+}
+
+.mobile-nav ul li a {
+    font-family: var(--serif);
+    font-size: clamp(36px, 8vw, 52px);
+    font-weight: 300;
+    color: rgba(255, 255, 255, .75);
+    text-decoration: none;
+    display: block;
+    padding: 8px 0;
+    transition: color .3s
+}
+
+.mobile-nav ul li a:hover {
+    color: var(--accent)
+}
+
+.mobile-nav-avail {
+    position: absolute;
+    bottom: 48px;
+    font-size: 10px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--muted)
+}
+
 /* RESPONSIVE */
 @media(max-width:1100px) {
     nav {
@@ -2276,6 +2461,33 @@ footer {
     }
 }
 
+@media(max-width:860px) {
+
+    .nav-center,
+    .nav-avail {
+        display: none
+    }
+
+    .nav-hamburger {
+        display: flex
+    }
+
+    .gallery-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 32px
+    }
+
+    .gallery-meta {
+        text-align: left
+    }
+
+    .gallery-filters {
+        justify-content: flex-start;
+        flex-wrap: wrap
+    }
+}
+
 @media(max-width:680px) {
     nav {
         padding: 20px 24px
@@ -2290,14 +2502,21 @@ footer {
         display: none
     }
 
-    .section-inner,
-    .footer {
-        padding-left: 24px;
-        padding-right: 24px
+    .nav-hamburger {
+        display: flex
+    }
+
+    .section-inner {
+        padding: 0 24px
+    }
+
+    footer {
+        padding: 60px 24px 36px
     }
 
     .hero-left {
-        padding: 0 24px 60px
+        padding: 0 24px 60px;
+        flex: 1
     }
 
     .hero-right {
@@ -2339,17 +2558,57 @@ footer {
         cursor: auto
     }
 
-    footer {
-        padding: 60px 24px 36px
-    }
-
     .footer-grid {
         grid-template-columns: 1fr;
         gap: 32px
     }
 
     .press-logos {
-        gap: 32px
+        gap: 32px;
+        flex-wrap: wrap
+    }
+
+    .clients-logos {
+        flex-wrap: wrap;
+        gap: 20px
+    }
+
+    .featured-quote {
+        padding: 0 28px;
+        font-size: clamp(22px, 6vw, 38px)
+    }
+
+    .about {
+        padding: 100px 0
+    }
+
+    .spread {
+        padding: 80px 0
+    }
+
+    .clients {
+        padding: 80px 0
+    }
+
+    .spread-left {
+        padding: 48px 24px
+    }
+
+    .loc-left {
+        padding: 48px 24px
+    }
+
+    .loc-left h3 {
+        font-size: 28px
+    }
+
+    .process-steps {
+        grid-template-columns: 1fr
+    }
+
+    .about-badge {
+        bottom: -24px;
+        right: -12px
     }
 }
 

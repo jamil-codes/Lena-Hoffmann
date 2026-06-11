@@ -44,7 +44,24 @@
         <div class="nav-right">
             <span class="nav-avail">Available for 2025</span>
         </div>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+
+    <!-- MOBILE NAV OVERLAY -->
+    <div class="mobile-nav" id="mobileNav">
+        <button class="mobile-nav-close" id="mobileNavClose">✕</button>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#gallery">Work</a></li>
+            <li><a href="#clients">Clients</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#awards">Awards</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <span class="mobile-nav-avail">Available for 2025</span>
+    </div>
 
     <!-- HERO -->
     <section class="hero" id="home">
@@ -200,7 +217,10 @@
         </div>
         <div class="lb-stage">
             <button class="lb-btn" id="lbPrev">←</button>
-            <img id="lbImg" src="" alt="">
+            <div class="lb-img-wrap">
+                <div class="lb-spinner" id="lbSpinner"></div>
+                <img id="lbImg" src="" alt="">
+            </div>
             <button class="lb-btn" id="lbNext">→</button>
         </div>
         <div class="lb-foot"><span id="lbCaption"></span></div>
